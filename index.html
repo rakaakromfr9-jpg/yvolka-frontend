@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YVOLKA Company </title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;900&family=Archivo+Expanded:wght@700;800;900&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==================== WELCOME COVER VIEW (YVOLKA HERO + SCROLL TO LOGIN) ==================== -->
+  <div id="welcomeView" class="app-view view-active">
+    <div class="welcome-page-wrap">
+
+      <!-- Top Fixed Nav Bar -->
+      <header class="welcome-top-nav">
+        <div class="welcome-brand">
+          <span class="dot"></span> YVOLKA
+        </div>
+        <div class="welcome-sys-status">
+          <div class="status-pill">
+            <span class="live-dot"></span> SYSTEM ONLINE
+          </div>
+          <span>v2.4 SECURE PORTAL</span>
+        </div>
+      </header>
+
+      <!-- SECTION 1: YVOLKA WELCOME GREETING HERO (FIRST SCREEN) -->
+      <section class="yvolka-welcome-hero">
+        <div class="welcome-grid-bg"></div>
+
+        <div class="yvolka-badge">
+          <span class="dot"></span> Welcome to YVOLKA Company
+        </div>
+
+        <h1 class="yvolka-hero-title">
+          We don't ask for <span class="stroke">attention,</span><br>
+          We <span class="accent">take</span> it.
+        </h1>
+
+        <p class="yvolka-hero-sub">
+          <strong>YVOLKA</strong> is a data-obsessed marketing collective turning bold ideas into measurable growth, viral moments, and revenue that actually shows up.
+        </p>
+
+        <!-- Scroll down indicator to Role section -->
+        <a href="#rolesSection" class="scroll-prompt">
+          <span>Scroll to Get Started</span>
+          <div class="scroll-arrow-icon">
+            ↓
+          </div>
+        </a>
+      </section>
+
+      <!-- SECTION 1.5: LET'S JOIN WITH US — CATEGORIES (INFO ONLY, NO PICKING) -->
+      <section id="rolesSection" class="roles-section">
+        <div class="welcome-grid-bg"></div>
+        <div class="roles-inner">
+          <span class="eyebrow-alt">How categories work</span>
+          <h2 class="roles-title">Let's Join <span class="accent">With Us.</span></h2>
+          <p class="roles-sub">There are three categories at YVOLKA. You don't pick one — it's read automatically from your role in our Discord server once you sign in below.</p>
+
+          <div class="role-info-grid">
+            <div class="role-info-card">
+              <span class="role-num">01</span>
+              <h3>Developer</h3>
+              <p>Builds the systems, tools and platforms that power YVOLKA's work.</p>
+            </div>
+            <div class="role-info-card">
+              <span class="role-num">02</span>
+              <h3>Artist</h3>
+              <p>Shapes the visual identity, illustration and craft behind every project.</p>
+            </div>
+            <div class="role-info-card">
+              <span class="role-num">03</span>
+              <h3>Creator</h3>
+              <p>Produces content, campaigns and stories that carry YVOLKA's voice.</p>
+            </div>
+          </div>
+
+          <a href="#authSection" class="scroll-prompt roles-continue">
+            <span>Continue to Sign In</span>
+            <div class="scroll-arrow-icon">↓</div>
+          </a>
+        </div>
+      </section>
+
+      <!-- SECTION 2: SIGN IN CARD SECTION (SCROLL DOWN REVEAL) -->
+      <section id="authSection" class="auth-section">
+        <h2 class="auth-page-title">Sign In</h2>
+
+        <div class="auth-card">
+          <!-- Option 1: Continue with Discord -->
+          <button id="discordLoginBtn" class="btn-auth-discord" title="Log in via official Discord OAuth2 API">
+            <svg viewBox="0 0 127.14 96.36">
+              <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a73.57,73.57,0,0,0,64.32,0c.87.69,1.76,1.37,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77.5,77.5,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.19-16.14c2.64-27.38-4.51-51.11-18.91-72.13ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,45.92,53.86,53,48.8,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,45.92,96.09,53,91,65.69,84.69,65.69Z"/>
+            </svg>
+            Continue with Discord
+          </button>
+
+          <!-- Divider "OR" -->
+          <div class="auth-divider">
+            <span>OR</span>
+          </div>
+
+          <!-- Option 2: Enter Discord Nickname -->
+          <div class="auth-input-group">
+            <input type="text" id="nicknameInputInline" class="auth-input" placeholder="Enter your Discord nickname">
+            <button id="nicknameSubmitBtn" class="btn-auth-continue">Continue with nickname</button>
+          </div>
+
+          <!-- Terms Footer -->
+          <p class="auth-terms">
+            By continuing, you acknowledge YVOLKA's <a href="#">Privacy Policy</a>.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- Bottom Ticker -->
+      <footer class="welcome-footer-ticker">
+        <div class="welcome-ticker-inner">
+          <span>PORT ELM &amp; HARLOW</span>
+          <span>EST. 2014</span>
+          <span>YVOLKA STUDIO</span>
+          <span>256-BIT ENCRYPTION</span>
+          <span>AUTHENTICATION READY</span>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ==================== PROTECTED DASHBOARD VIEW ==================== -->
+  <div id="dashboardView" class="app-view">
+
+    <!-- Top Discord User Status Bar -->
+    <div id="discordUserBar" class="discord-user-bar">
+      <div class="user-profile-info">
+        <div class="user-avatar-wrap">
+          <img id="userAvatarImg" class="user-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Discord Avatar">
+          <span class="user-status-dot"></span>
+        </div>
+        <div class="user-details">
+          <div class="user-name">
+            <span id="userGlobalName">Alex Rivera</span>
+            <span class="auth-badge">Verified via Discord</span>
+            <span class="role-chip" id="userRoleBadge">—</span>
+          </div>
+          <div id="userUsername" class="user-tag">@alex_yvolka</div>
+        </div>
+      </div>
+
+      <button id="logoutBtn" class="btn-logout">
+        Sign Out
+      </button>
+    </div>
+
+    <!-- MAIN YVOLKA COMPANY PROFILE CONTENT -->
+    <header class="nav" id="siteNav">
+      <a href="#top" class="logo"><span class="dot"></span>YVOLKA</a>
+      <nav class="links">
+        <a href="#" class="dash-nav-link active" data-view="home">Home</a>
+        <a href="#" class="dash-nav-link" data-view="account">Account</a>
+        <a href="#" class="dash-nav-link" data-view="campaign">Campaign</a>
+      </nav>
+      <a href="#contact" class="nav-cta">Contact</a>
+    </header>
+
+    <main id="top">
+
+      <!-- ============== HOME (company content) ============== -->
+      <div class="dash-view active" id="dashHome">
+
+        <!-- HERO -->
+        <section class="hero">
+          <div class="hero-grid"></div>
+          <div class="hero-eyebrow"><span class="dot"></span>PORT ELM &amp; HARLOW — DIGITAL BRAND STUDIO</div>
+          <h1 class="hero-title">
+            <span class="hero-reveal"><span>Built to <span class="stroke">provoke.</span></span></span><br>
+            <span class="hero-reveal"><span>Designed to <span class="accent">convert.</span></span></span>
+          </h1>
+          <div class="hero-sub-row">
+            <p class="hero-copy">YVOLKA is a research-driven design studio that helps brands <strong>engage</strong> users, <strong>connect</strong> with customers, and quietly <strong>outmaneuver</strong> their competition.</p>
+            <div class="hero-tags tag-list">
+              <span>Research</span><span>Strategy</span><span>Brand</span><span>Web</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- CLIENT MARQUEE -->
+        <section class="marquee-section" aria-label="Client roster">
+          <div class="marquee-track" id="marqueeTrack"></div>
+        </section>
+
+        <!-- ABOUT -->
+        <section class="section" id="about">
+          <div class="about-grid">
+            <div><span class="eyebrow">Who we are</span><h2 class="section-title">An international studio reimagining how brands connect</h2></div>
+            <div>
+              <p>We're a small team of curious humans who build work we're proud of, for brands we believe in. Every project pairs deep research with sharp art direction — combining strategy, branding, web design and development into digital experiences that actually move the needle.</p>
+              <a href="#" class="reel-btn"><span class="playdot"></span> Play studio reel</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- CAPABILITIES -->
+        <section class="section" id="capabilities">
+          <div class="section-head"><div><span class="eyebrow">What we do</span><h2 class="section-title">Capabilities</h2></div></div>
+          <div class="cap-list">
+            <details class="cap-item" open>
+              <summary><span class="cap-num">01</span><span class="cap-title">Research &amp; Strategy</span><span class="cap-toggle">+</span></summary>
+              <div class="cap-body">
+                We ground every engagement in primary and secondary research — usability testing, competitive audits, and stakeholder interviews — so creative decisions are validated, not guessed.
+                <div class="tag-list"><span>User Research</span><span>Competitive Audit</span><span>SEO Strategy</span></div>
+              </div>
+            </details>
+            <details class="cap-item">
+              <summary><span class="cap-num">02</span><span class="cap-title">Brand &amp; Design</span><span class="cap-toggle">+</span></summary>
+              <div class="cap-body">
+                Art direction, identity systems, and visual content that communicate what words can't — built to scale across every touchpoint a brand shows up in.
+                <div class="tag-list"><span>Identity Systems</span><span>Art Direction</span><span>Design Systems</span></div>
+              </div>
+            </details>
+            <details class="cap-item">
+              <summary><span class="cap-num">03</span><span class="cap-title">Engineering</span><span class="cap-toggle">+</span></summary>
+              <div class="cap-body">
+                Full-stack discipline applied to low-code systems — Webflow, headless commerce, and custom builds — so founders can ship fast and test concepts without waiting on a dev queue.
+                <div class="tag-list"><span>Webflow</span><span>eCommerce</span><span>Custom Development</span></div>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <!-- AWARDS -->
+        <section class="section">
+          <div class="section-head"><div><span class="eyebrow">Recognition</span><h2 class="section-title">We don't chase awards, but it's nice</h2></div></div>
+          <div class="awards-grid">
+            <div class="award-card"><div class="award-org">Design Press</div><ul><li>Site of the Day</li><li>Honourable Mention</li><li>Studio to Watch</li></ul></div>
+            <div class="award-card"><div class="award-org">Web Annual</div><ul><li>Site of the Day</li></ul></div>
+            <div class="award-card"><div class="award-org">Interface Awards</div><ul><li>Website of the Day</li><li>UX Design</li><li>UI Design</li></ul></div>
+            <div class="award-card"><div class="award-org">Craft Guild</div><ul><li>Shortlisted</li></ul></div>
+          </div>
+        </section>
+
+        <!-- STAT TICKER -->
+        <div class="stat-ticker">
+          <div class="ticker-row right"><div class="ticker-inner" id="tickerA"></div></div>
+          <div class="ticker-row left"><div class="ticker-inner" id="tickerB"></div></div>
+        </div>
+
+      </div>
+
+      <!-- ============== ACCOUNT ============== -->
+      <div class="dash-view" id="dashAccount">
+        <section class="section account-section">
+          <div class="section-head"><div><span class="eyebrow">Your profile</span><h2 class="section-title">Account</h2></div></div>
+
+          <div class="account-card">
+            <div class="account-card-top">
+              <img id="accountAvatarImg" class="account-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="">
+              <div>
+                <div class="account-name" id="accountName">—</div>
+                <div class="user-tag" id="accountUsername">—</div>
+                <div class="account-badges">
+                  <span class="auth-badge" id="accountAuthBadge">—</span>
+                  <span class="role-chip" id="accountRoleChip">—</span>
+                </div>
+              </div>
+            </div>
+            <div class="account-rows">
+              <div class="account-row"><span>Category</span><span id="accountRoleText">—</span></div>
+              <div class="account-row"><span>Member since</span><span id="accountJoined">—</span></div>
+              <div class="account-row"><span>Status</span><span>Active member</span></div>
+            </div>
+            <p class="role-status-note" id="accountRoleNote"></p>
+            <button id="accountLogoutBtn" class="btn-logout" style="margin-top:24px;">Sign Out</button>
+          </div>
+        </section>
+      </div>
+
+      <!-- ============== CAMPAIGN ============== -->
+      <div class="dash-view" id="dashCampaign">
+
+        <!-- FEATURED WORK / CAMPAIGNS -->
+        <section class="section" id="work">
+          <div class="section-head">
+            <div><span class="eyebrow">Featured work</span><h2 class="section-title">Selected case studies</h2></div>
+            <a href="#" class="section-link">View all work (31) →</a>
+          </div>
+          <div class="slider" id="slider">
+            <div class="slide active" data-i="0">
+              <div class="slide-media"><div class="thumb"></div></div>
+              <div class="slide-meta">
+                <div class="slide-name">Amber Field</div>
+                <div class="tag-list"><span>Brand Identity</span><span>Creative Direction</span><span>Strategy</span><span>Concept Design</span></div>
+              </div>
+            </div>
+            <div class="slide" data-i="1">
+              <div class="slide-media"><div class="thumb"></div></div>
+              <div class="slide-meta">
+                <div class="slide-name">Northbound Co.</div>
+                <div class="tag-list"><span>Digital Design</span><span>Web Development</span></div>
+              </div>
+            </div>
+            <div class="slide" data-i="2">
+              <div class="slide-media"><div class="thumb"></div></div>
+              <div class="slide-meta">
+                <div class="slide-name">Halden Gallery</div>
+                <div class="tag-list"><span>Creative Direction</span><span>Digital Design</span><span>Web Development</span></div>
+              </div>
+            </div>
+            <div class="slide" data-i="3">
+              <div class="slide-media"><div class="thumb"></div></div>
+              <div class="slide-meta">
+                <div class="slide-name">Plainfield Finance</div>
+                <div class="tag-list"><span>Brand Identity</span><span>Digital Design</span><span>Web Development</span></div>
+              </div>
+            </div>
+            <div class="slider-nav" id="sliderNav"></div>
+          </div>
+        </section>
+
+        <!-- BRANDS WORKED WITH — accordion -->
+        <section class="section" id="clients">
+          <div class="section-head"><div><span class="eyebrow">Track record</span><h2 class="section-title">Brands we've worked with</h2></div></div>
+          <div class="worked-list" id="workedList"></div>
+        </section>
+
+      </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer id="contact">
+      <div class="footer-top">
+        <div class="footer-cta">
+          <span class="eyebrow">Start a project</span>
+          <h3>Let's work — together.</h3>
+          <a href="#" class="footer-link">Get in touch →</a>
+        </div>
+        <div class="footer-info">
+          <div class="footer-col">
+            <h4>Business Enquiries</h4>
+            <a href="mailto:hello@yvolka.studio">hello@yvolka.studio</a>
+            <a href="#">+1 (000) 000-0000</a>
+          </div>
+          <div class="footer-col">
+            <h4>Studio</h4>
+            <p>Studio address on request</p>
+            <p>Port Elm · Harlow</p>
+          </div>
+          <div class="footer-col">
+            <h4>Business Hours</h4>
+            <p>Monday – Friday</p>
+            <p>08:00 – 18:00</p>
+          </div>
+
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>YVOLKA © 2026. All rights reserved.</p>
+        <div class="socials"><a href="#">Dribbble</a><a href="#">Instagram</a><a href="#">LinkedIn</a></div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
