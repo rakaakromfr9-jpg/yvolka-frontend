@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YVOLKA — Dashboard</title>
+  <meta name="description" content="Your YVOLKA dashboard. Browse open campaign briefs, manage your account, and explore sponsorship opportunities.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;900&family=Archivo+Expanded:wght@700;800;900&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==================== PROTECTED DASHBOARD VIEW ==================== -->
+  <div id="dashboardView">
+
+    <!-- Top Discord User Status Bar -->
+    <div id="discordUserBar" class="discord-user-bar">
+      <div class="user-profile-info">
+        <div class="user-avatar-wrap">
+          <img id="userAvatarImg" class="user-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Discord Avatar">
+          <span class="user-status-dot"></span>
+        </div>
+        <div class="user-details">
+          <div class="user-name">
+            <span id="userGlobalName">Alex Rivera</span>
+            <span class="role-chip" id="userRoleBadge">—</span>
+          </div>
+          <div id="userUsername" class="user-tag">@alex_yvolka</div>
+        </div>
+      </div>
+
+      <button id="logoutBtn" class="btn-logout">
+        Sign Out
+      </button>
+    </div>
+
+    <!-- MAIN YVOLKA APP CONTENT -->
+    <header class="nav" id="siteNav">
+      <a href="#top" class="logo"><span class="dot"></span>YVOLKA</a>
+      <nav class="links">
+        <a href="#" class="dash-nav-link active" data-view="home">Home</a>
+        <a href="#" class="dash-nav-link" data-view="account">Account</a>
+        <a href="#" class="dash-nav-link" data-view="campaign">Campaign</a>
+        <a href="#" class="dash-nav-link" data-view="sponsorship">Sponsorship</a>
+      </nav>
+      <a href="#contact" class="nav-cta">Contact</a>
+    </header>
+
+    <main id="top">
+
+      <!-- ============== HOME (simple welcome) ============== -->
+      <div class="dash-view active" id="dashHome">
+        <section class="dash-welcome">
+          <div class="dash-welcome-grid"></div>
+          <span class="eyebrow">Dashboard</span>
+          <h1 class="dash-welcome-title">Welcome back, <span class="accent" id="homeUserName">Creator</span>.</h1>
+          <p class="dash-welcome-sub">A quick look at where things stand. Browse open briefs under <strong>Campaign</strong>, or check your role and history under <strong>Account</strong>.</p>
+
+          <div class="dash-welcome-stats">
+            <div class="dash-stat-card">
+              <span class="dash-stat-num" id="homeOngoingCount">0</span>
+              <span class="dash-stat-label">Ongoing campaigns</span>
+            </div>
+            <div class="dash-stat-card">
+              <span class="dash-stat-num" id="homeCompletedCount">0</span>
+              <span class="dash-stat-label">Completed campaigns</span>
+            </div>
+            <div class="dash-stat-card">
+              <span class="dash-stat-num" id="homeRoleText">—</span>
+              <span class="dash-stat-label">Your role</span>
+            </div>
+          </div>
+
+          <a href="#" class="reel-btn" id="homeCampaignCta"><span class="playdot"></span> Browse open campaigns</a>
+        </section>
+      </div>
+
+      <!-- ============== ACCOUNT ============== -->
+      <div class="dash-view" id="dashAccount">
+        <section class="section account-section">
+          <div class="section-head"><div><span class="eyebrow">Your profile</span><h2 class="section-title">Account</h2></div></div>
+
+          <div class="account-card">
+            <div class="account-card-top">
+              <img id="accountAvatarImg" class="account-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="">
+              <div>
+                <div class="account-name" id="accountName">—</div>
+                <div class="user-tag" id="accountUsername">—</div>
+              </div>
+            </div>
+            <div class="account-rows">
+              <div class="account-row"><span>Nickname</span><span id="accountNick">—</span></div>
+              <div class="account-row"><span>Member since</span><span id="accountJoined">—</span></div>
+              <div class="account-row"><span>Role</span><span id="accountRoleText">—</span></div>
+              <div class="account-row"><span>Campaigns completed</span><span id="accountCompleted">0</span></div>
+              <div class="account-row"><span>Campaigns ongoing</span><span id="accountOngoing">0</span></div>
+            </div>
+            <p class="role-status-note" id="accountRoleNote"></p>
+            <button id="accountLogoutBtn" class="btn-logout" style="margin-top:24px;">Sign Out</button>
+          </div>
+        </section>
+      </div>
+
+      <!-- ============== CAMPAIGN ============== -->
+      <div class="dash-view" id="dashCampaign">
+        <section class="section" id="work">
+          <div class="section-head">
+            <div><span class="eyebrow">Open briefs</span><h2 class="section-title">Campaigns</h2></div>
+          </div>
+          <div class="campaign-grid" id="campaignGrid"></div>
+        </section>
+      </div>
+
+      <!-- ============== SPONSORSHIP ============== -->
+      <div class="dash-view" id="dashSponsorship">
+        <section class="section" id="sponsorship">
+          <div class="section-head"><div><span class="eyebrow">For brands</span><h2 class="section-title">Sponsorship</h2></div></div>
+          <p class="sponsorship-intro">Want to run a campaign with YVOLKA's creators? Tell us about your brand and we'll match your brief with the right Developers, Artists and Creators.</p>
+          <div class="sponsorship-grid">
+            <div class="sponsorship-card">
+              <h3>Starter</h3>
+              <p>One campaign, one creator tier, standard reporting at the end of the run.</p>
+            </div>
+            <div class="sponsorship-card">
+              <h3>Growth</h3>
+              <p>Multiple campaigns across creator tiers, with priority placement in the brief list.</p>
+            </div>
+            <div class="sponsorship-card">
+              <h3>Partner</h3>
+              <p>Ongoing partnership, a dedicated point of contact, and custom terms.</p>
+            </div>
+          </div>
+          <a href="mailto:hello@yvolka.studio" class="reel-btn"><span class="playdot"></span> Talk to us</a>
+        </section>
+      </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer id="contact">
+      <div class="footer-top">
+        <div class="footer-cta">
+          <span class="eyebrow">Start a project</span>
+          <h3>Let's work — together.</h3>
+          <a href="#" class="footer-link">Get in touch →</a>
+        </div>
+        <div class="footer-info">
+          <div class="footer-col">
+            <h4>Business Enquiries</h4>
+            <a href="mailto:hello@yvolka.studio">hello@yvolka.studio</a>
+            <a href="#">+1 (000) 000-0000</a>
+          </div>
+          <div class="footer-col">
+            <h4>Studio</h4>
+            <p>Studio address on request</p>
+            <p>Port Elm · Harlow</p>
+          </div>
+          <div class="footer-col">
+            <h4>Business Hours</h4>
+            <p>Monday – Friday</p>
+            <p>08:00 – 18:00</p>
+          </div>
+
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>YVOLKA © 2026. All rights reserved.</p>
+        <div class="socials"><a href="#">Dribbble</a><a href="#">Instagram</a><a href="#">LinkedIn</a></div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

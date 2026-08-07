@@ -1,57 +1,10 @@
 // ==========================================================================
-// DISCORD OAUTH2 CONFIG — set this ONCE, here, as the site owner.
-// This is public and safe to hardcode (Client ID is not a secret — only
-// Client Secret is, and this app never uses Client Secret since it relies
-// on the OAuth2 implicit flow, response_type=token).
-//
-// 1. Go to https://discord.com/developers/applications
-// 2. Create/select your application, copy its "Application ID" (Client ID)
-// 3. Under OAuth2 > Redirects, add EXACTLY the URL this site is hosted at
-//    (e.g. https://yourdomain.com/ or https://yourdomain.com/index.html)
-// 4. Paste that same URL below as DISCORD_REDIRECT_URI
-// ==========================================================================
-const DISCORD_CLIENT_ID = '1534210727001325618';
-const DISCORD_REDIRECT_URI = 'https://rakaakromfr9-jpg.github.io/yvolka-frontend/';
-
-// ==========================================================================
 // ROLE SERVER CONFIG — set this to your deployed backend URL.
-// See /server/README.md for how to set up and deploy that backend.
-// Roles (Developer / Artist / Creator) are NOT picked by the user —
-// they're read from the user's Discord server role via this backend.
 // ==========================================================================
-const ROLE_SERVER_URL = 'https://yvolka-backend.vercel.app/api/role/1023770611362840606'; // e.g. 'https://yvolka-role-server.onrender.com'
+const ROLE_SERVER_URL = 'https://yvolka-backend.vercel.app/api/role/1023770611362840606';
 
 // Labels for the "Let's Join With Us" roles
 const ROLE_LABELS = { developer: 'Developer', artist: 'Artist', creator: 'Creator' };
-
-// Ask the backend what role this Discord user belongs to.
-// Returns 'developer' | 'artist' | 'creator' | null.
-async function fetchServerRole(discordId) {
-  if (!ROLE_SERVER_URL) {
-    console.warn('ROLE_SERVER_URL is not set in main.js — role will show as "No role yet".');
-    return null;
-  }
-  try {
-    const res = await fetch(`${ROLE_SERVER_URL}/api/role/${discordId}`);
-    if (!res.ok) return null;
-    const data = await res.json();
-    return data.role || null;
-  } catch (err) {
-    console.error('Could not reach role server:', err);
-    return null;
-  }
-}
-
-// Human-readable role chip text + whether it should look "muted"
-function roleDisplay(user) {
-  if (user.role && ROLE_LABELS[user.role]) {
-    return { label: ROLE_LABELS[user.role], muted: false };
-  }
-  if (user.auth_type === 'nickname') {
-    return { label: 'Sign in with Discord for a role', muted: true };
-  }
-  return { label: 'No role yet', muted: true };
-}
 
 // ==========================================================================
 // CAMPAIGN DATA (demo/mock) — replace with a real fetch from your backend
@@ -110,6 +63,32 @@ const CAMPAIGNS = [
   }
 ];
 
+// Ask the backend what role this Discord user belongs to.
+// Returns 'developer' | 'artist' | 'creator' | null.
+async function fetchServerRole(discordId) {
+  if (!ROLE_SERVER_URL) return null;
+  try {
+    const res = await fetch(`${ROLE_SERVER_URL}/api/role/${discordId}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.role || null;
+  } catch (err) {
+    console.error('Could not reach role server:', err);
+    return null;
+  }
+}
+
+// Human-readable role chip text + whether it should look "muted"
+function roleDisplay(user) {
+  if (user.role && ROLE_LABELS[user.role]) {
+    return { label: ROLE_LABELS[user.role], muted: false };
+  }
+  if (user.auth_type === 'nickname') {
+    return { label: 'Sign in with Discord for a role', muted: true };
+  }
+  return { label: 'No role yet', muted: true };
+}
+
 function campaignStatusLabel(status) {
   if (status === 'ongoing') return 'Ongoing';
   if (status === 'completed') return 'Completed';
@@ -117,14 +96,7 @@ function campaignStatusLabel(status) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // View Elements
-  const welcomeView = document.getElementById('welcomeView');
-  const dashboardView = document.getElementById('dashboardView');
-
-  // Auth Buttons
-  const discordLoginBtn = document.getElementById('discordLoginBtn');
-  const nicknameInputInline = document.getElementById('nicknameInputInline');
-  const nicknameSubmitBtn = document.getElementById('nicknameSubmitBtn');
+  // Auth buttons
   const logoutBtn = document.getElementById('logoutBtn');
   const accountLogoutBtn = document.getElementById('accountLogoutBtn');
 
@@ -139,9 +111,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const dashViews = document.querySelectorAll('.dash-view');
   const homeCampaignCta = document.getElementById('homeCampaignCta');
 
-  // ---------------------------------------------------------------------
+  // ------------------------------------------------------------------
+  // Guard: if not logged in, redirect back to login page
+  // ------------------------------------------------------------------
+  const savedUser = localStorage.getItem('discord_user');
+  if (!savedUser) {
+    window.location.href = 'index.html';
+    return;
+  }
+
+  let currentUser;
+  try {
+    currentUser = JSON.parse(savedUser);
+  } catch (e) {
+    localStorage.removeItem('discord_user');
+    window.location.href = 'index.html';
+    return;
+  }
+
+  // ------------------------------------------------------------------
   // DASHBOARD TABS (Home / Account / Campaign / Sponsorship)
-  // ---------------------------------------------------------------------
+  // ------------------------------------------------------------------
   function setDashView(viewName) {
     dashViews.forEach(v => v.classList.toggle('active', v.id === 'dash' + viewName.charAt(0).toUpperCase() + viewName.slice(1)));
     dashNavLinks.forEach(l => l.classList.toggle('active', l.dataset.view === viewName));
@@ -162,21 +152,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // View Router Function
-  function setView(viewName) {
-    if (viewName === 'dashboard') {
-      welcomeView.classList.remove('view-active');
-      dashboardView.classList.add('view-active');
-      setDashView('home');
-      window.scrollTo(0, 0);
-    } else {
-      dashboardView.classList.remove('view-active');
-      welcomeView.classList.add('view-active');
-      window.scrollTo(0, 0);
-    }
-  }
-
+  // ------------------------------------------------------------------
   // Render Logged-In User Profile (top bar + Home + Account tab)
+  // ------------------------------------------------------------------
   function renderUserHeader(user) {
     if (!user) return;
     const avatarUrl = user.avatar
@@ -267,141 +245,40 @@ document.addEventListener('DOMContentLoaded', () => {
     `).join('');
   }
 
-  // Parse Discord OAuth URL Hash
-  function handleOAuthCallback() {
-    const hash = window.location.hash.substring(1);
-    if (!hash) return false;
-
-    const params = new URLSearchParams(hash);
-    const accessToken = params.get('access_token');
-    const tokenType = params.get('token_type');
-
-    if (accessToken) {
-      history.replaceState(null, "", window.location.pathname + window.location.search);
-
-      fetch('https://discord.com/api/v10/users/@me', {
-        headers: { Authorization: `${tokenType || 'Bearer'} ${accessToken}` }
-      })
-        .then(res => res.json())
-        .then(async userData => {
-          if (userData && userData.id) {
-            userData.auth_type = 'oauth2';
-            userData.role = await fetchServerRole(userData.id); // read from Discord server role
-            localStorage.setItem('discord_user', JSON.stringify(userData));
-            renderUserHeader(userData);
-            setView('dashboard');
-          }
-        })
-        .catch(err => {
-          console.error('Discord API authorization failed:', err);
-          alert('Could not verify OAuth2 token with Discord. You can log in using your Discord Nickname.');
-        });
-      return true;
-    }
-    return false;
-  }
-
-  // Check saved session on page load
-  function checkAuthSession() {
-    const isHandlingOAuth = handleOAuthCallback();
-    if (isHandlingOAuth) return;
-
-    const savedUser = localStorage.getItem('discord_user');
-    if (savedUser) {
-      try {
-        const userObj = JSON.parse(savedUser);
-        renderUserHeader(userObj);
-        setView('dashboard');
-
-        // Re-check the Discord role in the background — if an admin changed
-        // it since last visit, the dashboard updates without a fresh login.
-        if (userObj.auth_type === 'oauth2') {
-          fetchServerRole(userObj.id).then(role => {
-            userObj.role = role;
-            localStorage.setItem('discord_user', JSON.stringify(userObj));
-            renderUserHeader(userObj);
-          });
-        }
-      } catch (e) {
-        localStorage.removeItem('discord_user');
-        setView('welcome');
-      }
-    } else {
-      setView('welcome');
-    }
-  }
-
-  // --- NICKNAME LOGIN HANDLER ---
-  // Note: nickname sign-in isn't a verified Discord account, so it can't be
-  // matched against a Discord server role — these users get no role.
-  function handleNicknameSubmit() {
-    const rawName = nicknameInputInline ? nicknameInputInline.value.trim() : '';
-    if (!rawName) {
-      alert('Please enter your Discord nickname.');
-      if (nicknameInputInline) nicknameInputInline.focus();
-      return;
-    }
-
-    const randomAvatarIndex = Math.floor(Math.random() * 5);
-    const userObj = {
-      id: 'nick_' + Date.now().toString(36),
-      username: rawName.toLowerCase().replace(/\s+/g, '_'),
-      global_name: rawName,
-      avatar: `https://cdn.discordapp.com/embed/avatars/${randomAvatarIndex}.png`,
-      auth_type: 'nickname',
-      role: null
-    };
-
-    localStorage.setItem('discord_user', JSON.stringify(userObj));
-    renderUserHeader(userObj);
-    setView('dashboard');
-  }
-
-  // --- EVENT LISTENERS ---
-
-  // Option 1: Direct Discord OAuth Login (public — no per-user config needed)
-  if (discordLoginBtn) {
-    discordLoginBtn.addEventListener('click', () => {
-      if (!DISCORD_CLIENT_ID || DISCORD_CLIENT_ID === '') {
-        alert('Discord login is not configured yet. The site owner needs to set DISCORD_CLIENT_ID in main.js.');
-        return;
-      }
-
-      const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(DISCORD_REDIRECT_URI)}&response_type=token&scope=identify%20email`;
-      window.location.href = authUrl;
-    });
-  }
-
-  // Option 2: Continue with nickname
-  if (nicknameSubmitBtn) {
-    nicknameSubmitBtn.addEventListener('click', handleNicknameSubmit);
-  }
-
-  if (nicknameInputInline) {
-    nicknameInputInline.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        handleNicknameSubmit();
-      }
-    });
-  }
-
-  // Sign Out (top bar + Account tab)
+  // ------------------------------------------------------------------
+  // Sign Out
+  // ------------------------------------------------------------------
   function handleLogout() {
     localStorage.removeItem('discord_user');
-    setView('welcome');
+    window.location.href = 'index.html';
   }
   if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
   if (accountLogoutBtn) accountLogoutBtn.addEventListener('click', handleLogout);
 
-  // --- DASHBOARD INTERACTIVE FEATURES ---
+  // ------------------------------------------------------------------
+  // Dashboard interactive nav scroll effect
+  // ------------------------------------------------------------------
   const nav = document.getElementById('siteNav');
   if (nav) {
     window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40), { passive: true });
   }
 
-  // Build the campaign cards once on load
+  // ------------------------------------------------------------------
+  // Initialize
+  // ------------------------------------------------------------------
   renderCampaigns();
+  renderUserHeader(currentUser);
 
-  // Initialize Session Check
-  checkAuthSession();
+  // Re-check the Discord role in the background — if an admin changed
+  // it since last visit, the dashboard updates without a fresh login.
+  if (currentUser.auth_type === 'oauth2') {
+    fetchServerRole(currentUser.id).then(role => {
+      currentUser.role = role;
+      localStorage.setItem('discord_user', JSON.stringify(currentUser));
+      renderUserHeader(currentUser);
+    });
+  }
+
+  // Start at Home tab
+  setDashView('home');
 });
