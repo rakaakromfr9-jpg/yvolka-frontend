@@ -49,55 +49,88 @@
 
     <main id="top">
 
-      <!-- ============== HOME (simple welcome) ============== -->
+      <!-- ============== HOME (overview: spotlight + quick links) ============== -->
       <div class="dash-view active" id="dashHome">
         <section class="dash-welcome">
           <div class="dash-welcome-grid"></div>
+          <div class="deco-blob deco-blob--a"></div>
+          <div class="deco-blob deco-blob--c"></div>
           <span class="eyebrow">Dashboard</span>
           <h1 class="dash-welcome-title">Welcome back, <span class="accent" id="homeUserName">Creator</span>.</h1>
-          <p class="dash-welcome-sub">A quick look at where things stand. Browse open briefs under <strong>Campaign</strong>, or check your role and history under <strong>Account</strong>.</p>
+          <p class="dash-welcome-sub">A quick look at where things stand. Your full role, history and stats live under <strong>Account</strong> — here's what's worth your attention right now.</p>
 
-          <div class="dash-welcome-stats">
-            <div class="dash-stat-card">
-              <span class="dash-stat-num" id="homeOngoingCount">0</span>
-              <span class="dash-stat-label">Ongoing campaigns</span>
+          <div class="home-highlight-grid">
+            <div class="home-spotlight-card corner-frame" id="homeSpotlightCard">
+              <span class="eyebrow-alt" style="margin-bottom:0;">Spotlight brief</span>
+              <div class="home-spotlight-meta">
+                <span class="campaign-status" id="homeSpotlightStatus">Open</span>
+                <span class="home-spotlight-pay" id="homeSpotlightPay">—</span>
+              </div>
+              <h3 id="homeSpotlightTitle">—</h3>
+              <p id="homeSpotlightRules">—</p>
+              <a href="#" class="reel-btn" id="homeCampaignCta"><span class="playdot"></span> Browse open campaigns</a>
             </div>
-            <div class="dash-stat-card">
-              <span class="dash-stat-num" id="homeCompletedCount">0</span>
-              <span class="dash-stat-label">Completed campaigns</span>
-            </div>
-            <div class="dash-stat-card">
-              <span class="dash-stat-num" id="homeRoleText">—</span>
-              <span class="dash-stat-label">Your role</span>
+
+            <div class="home-quicklinks">
+              <a href="#" class="home-quick-card" data-view="account">
+                <span class="quick-arrow">→ ACCOUNT</span>
+                <h4>Role &amp; history</h4>
+                <p>Your Discord role, campaigns completed and ongoing.</p>
+              </a>
+              <a href="#" class="home-quick-card" data-view="campaign">
+                <span class="quick-arrow">→ CAMPAIGN</span>
+                <h4>Open briefs</h4>
+                <p>Every active campaign, pay rate and rule set.</p>
+              </a>
+              <a href="#" class="home-quick-card" data-view="sponsorship">
+                <span class="quick-arrow">→ SPONSORSHIP</span>
+                <h4>For brands</h4>
+                <p>Partner tiers and the sponsors backing YVOLKA.</p>
+              </a>
             </div>
           </div>
-
-          <a href="#" class="reel-btn" id="homeCampaignCta"><span class="playdot"></span> Browse open campaigns</a>
         </section>
       </div>
 
-      <!-- ============== ACCOUNT ============== -->
+      <!-- ============== ACCOUNT (maincard) ============== -->
       <div class="dash-view" id="dashAccount">
         <section class="section account-section">
           <div class="section-head"><div><span class="eyebrow">Your profile</span><h2 class="section-title">Account</h2></div></div>
 
-          <div class="account-card">
-            <div class="account-card-top">
-              <img id="accountAvatarImg" class="account-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="">
-              <div>
-                <div class="account-name" id="accountName">—</div>
-                <div class="user-tag" id="accountUsername">—</div>
+          <div class="account-maincard corner-frame">
+            <div class="deco-blob deco-blob--c" style="opacity:.3;"></div>
+            <div class="account-maincard-grid">
+              <div class="account-identity">
+                <div class="account-avatar-wrap">
+                  <img id="accountAvatarImg" class="account-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="">
+                </div>
+                <div class="account-identity-name">
+                  <div class="account-name" id="accountName">—</div>
+                  <div class="account-username" id="accountUsername">—</div>
+                  <div class="account-role-chip-row">
+                    <span class="role-chip" id="accountRoleChip">—</span>
+                  </div>
+                </div>
+                <div class="account-since">Member since <strong id="accountJoined">—</strong></div>
+              </div>
+
+              <div class="account-stats-panel">
+                <div class="account-stat-grid">
+                  <div class="account-stat-cell">
+                    <span class="account-stat-num" id="accountOngoing">0</span>
+                    <span class="account-stat-label">Campaigns ongoing</span>
+                  </div>
+                  <div class="account-stat-cell">
+                    <span class="account-stat-num" id="accountCompleted">0</span>
+                    <span class="account-stat-label">Campaigns completed</span>
+                  </div>
+                </div>
+                <p class="role-status-note" id="accountRoleNote"></p>
+                <div class="account-maincard-actions">
+                  <button id="accountLogoutBtn" class="btn-logout">Sign Out</button>
+                </div>
               </div>
             </div>
-            <div class="account-rows">
-              <div class="account-row"><span>Nickname</span><span id="accountNick">—</span></div>
-              <div class="account-row"><span>Member since</span><span id="accountJoined">—</span></div>
-              <div class="account-row"><span>Role</span><span id="accountRoleText">—</span></div>
-              <div class="account-row"><span>Campaigns completed</span><span id="accountCompleted">0</span></div>
-              <div class="account-row"><span>Campaigns ongoing</span><span id="accountOngoing">0</span></div>
-            </div>
-            <p class="role-status-note" id="accountRoleNote"></p>
-            <button id="accountLogoutBtn" class="btn-logout" style="margin-top:24px;">Sign Out</button>
           </div>
         </section>
       </div>
@@ -117,16 +150,21 @@
         <section class="section" id="sponsorship">
           <div class="section-head"><div><span class="eyebrow">For brands</span><h2 class="section-title">Sponsorship</h2></div></div>
           <p class="sponsorship-intro">Want to run a campaign with YVOLKA's creators? Tell us about your brand and we'll match your brief with the right Developers, Artists and Creators.</p>
+
+          <div class="sponsor-marquee">
+            <div class="sponsor-marquee-track" id="sponsorMarqueeTrack"><!-- filled by dashboard.js --></div>
+          </div>
+
           <div class="sponsorship-grid">
-            <div class="sponsorship-card">
+            <div class="sponsorship-card corner-frame">
               <h3>Starter</h3>
               <p>One campaign, one creator tier, standard reporting at the end of the run.</p>
             </div>
-            <div class="sponsorship-card">
+            <div class="sponsorship-card corner-frame">
               <h3>Growth</h3>
               <p>Multiple campaigns across creator tiers, with priority placement in the brief list.</p>
             </div>
-            <div class="sponsorship-card">
+            <div class="sponsorship-card corner-frame">
               <h3>Partner</h3>
               <p>Ongoing partnership, a dedicated point of contact, and custom terms.</p>
             </div>

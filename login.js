@@ -38,8 +38,6 @@ async function fetchServerRole(discordId) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const discordLoginBtn = document.getElementById('discordLoginBtn');
-  const nicknameInputInline = document.getElementById('nicknameInputInline');
-  const nicknameSubmitBtn = document.getElementById('nicknameSubmitBtn');
 
   // ------------------------------------------------------------------
   // Parse Discord OAuth2 implicit-flow hash on redirect back to this page
@@ -71,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(err => {
           console.error('Discord API authorization failed:', err);
-          alert('Could not verify OAuth2 token with Discord. You can log in using your Discord Nickname.');
+          alert('Could not verify OAuth2 token with Discord. Please try signing in again.');
         });
       return true;
     }
@@ -99,35 +97,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ------------------------------------------------------------------
-  // Nickname login handler
-  // ------------------------------------------------------------------
-  function handleNicknameSubmit() {
-    const rawName = nicknameInputInline ? nicknameInputInline.value.trim() : '';
-    if (!rawName) {
-      alert('Please enter your Discord nickname.');
-      if (nicknameInputInline) nicknameInputInline.focus();
-      return;
-    }
-
-    const randomAvatarIndex = Math.floor(Math.random() * 5);
-    const userObj = {
-      id: 'nick_' + Date.now().toString(36),
-      username: rawName.toLowerCase().replace(/\s+/g, '_'),
-      global_name: rawName,
-      avatar: `https://cdn.discordapp.com/embed/avatars/${randomAvatarIndex}.png`,
-      auth_type: 'nickname',
-      role: null
-    };
-
-    localStorage.setItem('discord_user', JSON.stringify(userObj));
-    window.location.href = 'dashboard.html';
-  }
-
-  // ------------------------------------------------------------------
   // Event Listeners
   // ------------------------------------------------------------------
 
-  // Option 1: Discord OAuth
+  // Discord OAuth — the only sign-in path
   if (discordLoginBtn) {
     discordLoginBtn.addEventListener('click', () => {
       if (!DISCORD_CLIENT_ID || DISCORD_CLIENT_ID === '') {
@@ -136,16 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(DISCORD_REDIRECT_URI)}&response_type=token&scope=identify%20email`;
       window.location.href = authUrl;
-    });
-  }
-
-  // Option 2: Nickname
-  if (nicknameSubmitBtn) {
-    nicknameSubmitBtn.addEventListener('click', handleNicknameSubmit);
-  }
-  if (nicknameInputInline) {
-    nicknameInputInline.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') handleNicknameSubmit();
     });
   }
 

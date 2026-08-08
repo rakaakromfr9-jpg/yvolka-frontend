@@ -57,6 +57,60 @@ a:focus-visible, button:focus-visible, summary:focus-visible{outline:2px solid v
   pointer-events: none;
 }
 
+/* ==========================================================================
+   ORNAMENTS — reusable decorative elements so black panels never sit flat.
+   Everything stays inside the black / orange palette (var(--black), var(--red)).
+   ========================================================================== */
+
+/* Soft blurred orange blobs — drop one or two into any relatively-positioned
+   section as ambient atmosphere. Position per-instance with utility modifiers. */
+.deco-blob{
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(227,66,31,0.55), rgba(227,66,31,0.08) 60%, transparent 72%);
+  filter: blur(6px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: .8;
+}
+.deco-blob--a{ width: 420px; height: 420px; top: -120px; right: -80px; }
+.deco-blob--b{ width: 300px; height: 300px; bottom: -100px; left: -60px; opacity: .55; }
+.deco-blob--c{ width: 240px; height: 240px; top: 40%; left: 46%; opacity: .35; }
+
+/* Viewfinder-style corner brackets — sits just outside the element's box,
+   drawn entirely with CSS backgrounds on a pseudo-element (never fights the
+   element's own background/border-radius). */
+.corner-frame{ position: relative; }
+.corner-frame::after{
+  content: "";
+  position: absolute;
+  inset: -9px;
+  pointer-events: none;
+  z-index: 2;
+  background-repeat: no-repeat;
+  background-image:
+    linear-gradient(var(--red), var(--red)), linear-gradient(var(--red), var(--red)),
+    linear-gradient(var(--red), var(--red)), linear-gradient(var(--red), var(--red)),
+    linear-gradient(var(--red), var(--red)), linear-gradient(var(--red), var(--red)),
+    linear-gradient(var(--red), var(--red)), linear-gradient(var(--red), var(--red));
+  background-size: 16px 2px, 2px 16px, 16px 2px, 2px 16px, 16px 2px, 2px 16px, 16px 2px, 2px 16px;
+  background-position:
+    top left, top left,
+    top right, top right,
+    bottom left, bottom left,
+    bottom right, bottom right;
+  opacity: .8;
+}
+
+/* Fine diagonal texture strip — a thin ornamental band, used to break up
+   large flat black areas without introducing a new color. */
+.deco-hatch{
+  position: absolute;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(135deg, rgba(227,66,31,0.14) 0 1px, transparent 1px 14px);
+  z-index: 0;
+}
+
 /* WELCOME TOP NAV BAR */
 .welcome-top-nav {
   display: flex;
@@ -222,6 +276,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible{outline:2px solid v
   position: relative;
   z-index: 5;
   border-top: 1px solid var(--line);
+  overflow: hidden;
 }
 
 .auth-page-title {
@@ -231,6 +286,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible{outline:2px solid v
   color: var(--paper);
   margin-bottom: 28px;
   letter-spacing: -0.01em;
+  position: relative;
+  z-index: 3;
 }
 
 .auth-card {
@@ -239,11 +296,24 @@ a:focus-visible, button:focus-visible, summary:focus-visible{outline:2px solid v
   background: #141412;
   border: 1px solid rgba(243, 240, 232, 0.12);
   border-radius: 20px;
-  padding: 32px 30px;
+  padding: 36px 32px;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
+  position: relative;
+  z-index: 3;
+}
+.auth-card::before{
+  content: "AUTH";
+  position: absolute;
+  top: 16px;
+  right: -30px;
+  transform: rotate(90deg);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .3em;
+  color: rgba(227,66,31,0.4);
 }
 
 /* CONTINUE WITH DISCORD BUTTON */
@@ -258,7 +328,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible{outline:2px solid v
   font-family: 'Archivo', sans-serif;
   font-size: 15px;
   font-weight: 600;
-  padding: 14px 20px;
+  padding: 16px 20px;
   border-radius: 12px;
   border: 1px solid rgba(243, 240, 232, 0.08);
   cursor: pointer;
@@ -266,76 +336,12 @@ a:focus-visible, button:focus-visible, summary:focus-visible{outline:2px solid v
 }
 .btn-auth-discord:hover {
   background: #333330;
-  border-color: rgba(243, 240, 232, 0.2);
+  border-color: rgba(227, 66, 31, 0.4);
 }
 .btn-auth-discord svg {
   width: 22px;
   height: 22px;
   fill: #5865F2;
-}
-
-/* DIVIDER "OR" */
-.auth-divider {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  color: var(--paper-dim);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  margin: 4px 0;
-}
-.auth-divider::before,
-.auth-divider::after {
-  content: '';
-  flex: 1;
-  border-bottom: 1px solid rgba(243, 240, 232, 0.1);
-}
-.auth-divider span {
-  padding: 0 14px;
-}
-
-/* INPUT & CONTINUE BUTTON */
-.auth-input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.auth-input {
-  width: 100%;
-  background: #1a1a18;
-  border: 1px solid rgba(243, 240, 232, 0.16);
-  border-radius: 12px;
-  color: var(--paper);
-  padding: 14px 18px;
-  font-size: 15px;
-  font-family: 'Archivo', sans-serif;
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-.auth-input::placeholder {
-  color: rgba(168, 163, 150, 0.5);
-}
-.auth-input:focus {
-  border-color: var(--paper);
-  box-shadow: 0 0 0 2px rgba(243, 240, 232, 0.1);
-}
-
-.btn-auth-continue {
-  width: 100%;
-  background: #ffffff;
-  color: #0b0b0a;
-  font-family: 'Archivo', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  padding: 14px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.btn-auth-continue:hover {
-  background: #e6e3db;
 }
 
 /* TERMS DISCLAIMER */
@@ -600,10 +606,11 @@ footer { padding: 100px 40px 40px; }
 .dash-view.active{ display: block; }
 .dash-nav-link.active::after{ width: 100%; }
 
-/* DASHBOARD HOME — simple welcome, no long marketing content */
+/* DASHBOARD HOME — overview hub: a spotlight brief + quick links out to
+   the other tabs, instead of duplicating the numbers now living on Account. */
 .dash-welcome{
   position: relative;
-  padding: 110px 40px 80px;
+  padding: 110px 40px 90px;
   border-bottom: 1px solid var(--line);
   overflow: hidden;
 }
@@ -622,30 +629,72 @@ footer { padding: 100px 40px 40px; }
 .dash-welcome-title .accent{ color: var(--red); }
 .dash-welcome-sub{
   font-family:'Newsreader',serif; font-style: italic; color: var(--paper-dim); font-size: 16px;
-  max-width: 560px; line-height: 1.6; margin-bottom: 40px; position: relative; z-index: 2;
+  max-width: 560px; line-height: 1.6; margin-bottom: 44px; position: relative; z-index: 2;
 }
 .dash-welcome-sub strong{ color: var(--paper); font-style: normal; }
-.dash-welcome-stats{
-  display:flex; gap: 2px; background: var(--line); border: 1px solid var(--line);
-  max-width: 640px; margin-bottom: 36px; position: relative; z-index: 2;
-}
-.dash-stat-card{ background: var(--black); flex:1; padding: 20px 18px; }
-.dash-stat-num{ display:block; font-family:'Archivo Expanded',sans-serif; font-weight:900; font-size: 28px; color: var(--paper); }
-.dash-stat-label{ display:block; font-size: 10.5px; text-transform: uppercase; letter-spacing:.08em; color: var(--paper-dim); margin-top: 6px; }
 
-/* ACCOUNT VIEW */
-.account-section{ padding-top: 70px; }
-.account-card{
-  max-width: 560px; background: var(--panel); border: 1px solid var(--line);
-  border-radius: 16px; padding: 34px;
+/* HOME — spotlight brief + quick-link grid */
+.home-highlight-grid{
+  position: relative; z-index: 2;
+  display: grid; grid-template-columns: 1.3fr 1fr; gap: 28px; align-items: stretch;
 }
-.account-card-top{ display: flex; gap: 18px; align-items: center; margin-bottom: 28px; }
-.account-avatar{ width: 64px; height: 64px; border-radius: 50%; border: 1.5px solid var(--red); object-fit: cover; }
-.account-name{ font-family: 'Archivo Expanded', sans-serif; font-weight: 900; font-size: 20px; text-transform: uppercase; }
-.account-rows{ border-top: 1px solid var(--line); }
-.account-row{ display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 14px; gap: 16px; }
-.account-row span:first-child{ color: var(--paper-dim); text-transform: uppercase; font-size: 11px; letter-spacing: .08em; }
-.account-row span:last-child{ text-align: right; }
+.home-spotlight-card{
+  background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+  padding: 30px 28px; display: flex; flex-direction: column; gap: 14px;
+  position: relative; overflow: visible;
+}
+.home-spotlight-meta{ display:flex; align-items:center; gap: 12px; flex-wrap: wrap; }
+.home-spotlight-pay{ font-family:'Archivo Expanded',sans-serif; font-weight: 800; font-size: 14px; color: var(--red); }
+.home-spotlight-card h3{ font-family:'Archivo Expanded',sans-serif; font-weight: 900; font-size: 21px; text-transform: uppercase; line-height: 1.2; }
+.home-spotlight-card p{ font-size: 13px; line-height: 1.6; color: var(--paper-dim); }
+.home-spotlight-card .reel-btn{ align-self: flex-start; margin-top: auto; }
+
+.home-quicklinks{ display: flex; flex-direction: column; gap: 14px; }
+.home-quick-card{
+  flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 4px;
+  background: rgba(243,240,232,0.03); border: 1px solid var(--line); border-radius: 14px;
+  padding: 18px 20px; transition: border-color .2s, background .2s, transform .2s;
+  cursor: pointer;
+}
+.home-quick-card:hover{ border-color: rgba(227,66,31,0.4); background: rgba(227,66,31,0.06); transform: translateX(4px); }
+.home-quick-card .quick-arrow{ font-family:'Archivo Expanded',sans-serif; font-weight: 800; font-size: 12px; color: var(--red); }
+.home-quick-card h4{ font-family:'Archivo Expanded',sans-serif; font-weight: 900; font-size: 15px; text-transform: uppercase; }
+.home-quick-card p{ font-size: 12.5px; color: var(--paper-dim); }
+
+/* ACCOUNT VIEW — this is the maincard: full-width, prominent, the visual
+   anchor of the tab rather than a small side panel. */
+.account-section{ padding-top: 70px; position: relative; overflow: hidden; }
+.account-maincard{
+  position: relative;
+  max-width: 100%;
+  background: linear-gradient(155deg, var(--panel) 0%, #1a1109 120%);
+  border: 1px solid rgba(227,66,31,0.22);
+  border-radius: 22px;
+  padding: 44px 46px;
+  box-shadow: 0 40px 90px rgba(0,0,0,0.55);
+}
+.account-maincard-grid{
+  display: grid; grid-template-columns: 1fr 1.15fr; gap: 40px; align-items: start;
+  position: relative; z-index: 2;
+}
+.account-identity{ display: flex; flex-direction: column; gap: 16px; }
+.account-avatar-wrap{ position: relative; width: 96px; height: 96px; }
+.account-avatar{ width: 96px; height: 96px; border-radius: 50%; border: 2px solid var(--red); object-fit: cover; }
+.account-identity-name{ display: flex; flex-direction: column; gap: 8px; }
+.account-name{ font-family: 'Archivo Expanded', sans-serif; font-weight: 900; font-size: 28px; text-transform: uppercase; line-height: 1.05; }
+.account-username{ font-size: 13px; color: var(--paper-dim); }
+.account-role-chip-row{ display:flex; align-items:center; gap: 10px; margin-top: 4px; }
+.account-role-chip-row .role-chip{ font-size: 11px; padding: 5px 12px; }
+.account-since{ font-size: 12px; color: var(--paper-dim); margin-top: 10px; }
+.account-since strong{ color: var(--paper); font-weight: 700; }
+
+.account-stats-panel{ display: flex; flex-direction: column; gap: 22px; }
+.account-stat-grid{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.account-stat-cell{ background: var(--black); padding: 20px 18px; }
+.account-stat-num{ display:block; font-family:'Archivo Expanded',sans-serif; font-weight:900; font-size: 30px; color: var(--paper); }
+.account-stat-label{ display:block; font-size: 10.5px; text-transform: uppercase; letter-spacing:.08em; color: var(--paper-dim); margin-top: 6px; }
+.role-status-note{ font-size: 12.5px; line-height: 1.6; color: var(--paper-dim); }
+.account-maincard-actions{ display: flex; gap: 12px; }
 
 /* CAMPAIGN CARDS */
 .campaign-grid{
@@ -675,17 +724,49 @@ footer { padding: 100px 40px 40px; }
 .campaign-rules{ font-size: 12.5px; line-height: 1.55; color: var(--paper-dim); border-top: 1px solid var(--line); padding-top: 12px; }
 .campaign-rules strong{ color: var(--paper); }
 
-/* SPONSORSHIP */
-.sponsorship-intro{ font-family:'Newsreader',serif; font-style: italic; color: var(--paper-dim); font-size: 16px; max-width: 640px; margin-bottom: 40px; }
-.sponsorship-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap:2px; background: var(--line); margin-bottom: 36px; }
-.sponsorship-card{ background: var(--black); padding: 30px 26px; }
+/* SPONSORSHIP — information cards (tiers) stay static; sponsor names run
+   in a continuous marquee band above them. */
+.sponsorship-intro{ font-family:'Newsreader',serif; font-style: italic; color: var(--paper-dim); font-size: 16px; max-width: 640px; margin-bottom: 36px; }
+
+.sponsor-marquee{
+  position: relative;
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  padding: 22px 0; margin-bottom: 44px; overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+}
+.sponsor-marquee-track{
+  display: flex; align-items: center; gap: 64px; width: max-content;
+  animation: sponsorScroll 28s linear infinite;
+}
+.sponsor-marquee:hover .sponsor-marquee-track{ animation-play-state: paused; }
+.sponsor-marquee-name{
+  font-family: 'Archivo Expanded', sans-serif; font-weight: 900; font-size: 22px;
+  text-transform: uppercase; letter-spacing: .02em; color: var(--paper-dim);
+  white-space: nowrap; display: flex; align-items: center; gap: 16px;
+  transition: color .2s;
+}
+.sponsor-marquee-name:hover{ color: var(--red); }
+.sponsor-marquee-name .dot{ width: 5px; height: 5px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
+@keyframes sponsorScroll{
+  from{ transform: translateX(0); }
+  to{ transform: translateX(-50%); }
+}
+
+.sponsorship-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap:2px; background: var(--line); margin-bottom: 36px; border: 1px solid var(--line); }
+.sponsorship-card{ background: var(--black); padding: 30px 26px; position: relative; }
 .sponsorship-card h3{ font-family:'Archivo Expanded',sans-serif; font-weight:900; text-transform:uppercase; font-size: 18px; margin-bottom: 10px; }
 .sponsorship-card p{ font-size: 13.5px; line-height:1.6; color: var(--paper-dim); }
 
 @media(max-width: 900px){
   .dash-welcome{ padding: 90px 22px 60px; }
-  .dash-welcome-stats{ flex-direction: column; }
-  .account-card{ padding: 26px; }
+  .home-highlight-grid{ grid-template-columns: 1fr; }
+  .account-maincard{ padding: 30px 24px; }
+  .account-maincard-grid{ grid-template-columns: 1fr; gap: 28px; }
   .campaign-grid{ grid-template-columns: 1fr; }
   .sponsorship-grid{ grid-template-columns: 1fr; }
+  .deco-blob--a, .deco-blob--b, .deco-blob--c{ display: none; }
+}
+@media (prefers-reduced-motion: reduce){
+  .sponsor-marquee-track{ animation: none; }
 }

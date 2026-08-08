@@ -63,6 +63,15 @@ const CAMPAIGNS = [
   }
 ];
 
+// ==========================================================================
+// SPONSOR DATA (demo/mock) — just names for the marquee. Replace with a
+// real fetch once sponsors are stored server-side.
+// ==========================================================================
+const SPONSORS = [
+  'Amber Field', 'Northbound Co.', 'Halden Gallery', 'Plainfield Finance',
+  'Coastline Freight', 'Iron Gate Studio', 'Marrow & Co.', 'Vantage Point'
+];
+
 // Ask the backend what role this Discord user belongs to.
 // Returns 'developer' | 'artist' | 'creator' | null.
 async function fetchServerRole(discordId) {
@@ -83,10 +92,15 @@ function roleDisplay(user) {
   if (user.role && ROLE_LABELS[user.role]) {
     return { label: ROLE_LABELS[user.role], muted: false };
   }
-  if (user.auth_type === 'nickname') {
-    return { label: 'Sign in with Discord for a role', muted: true };
-  }
   return { label: 'No role yet', muted: true };
+}
+
+// Pick the campaign to feature on the Home tab: an ongoing one the user is
+// part of, falling back to the first open brief.
+function pickSpotlightCampaign() {
+  return CAMPAIGNS.find(c => c.mine && c.status === 'ongoing')
+    || CAMPAIGNS.find(c => c.status === 'open')
+    || CAMPAIGNS[0];
 }
 
 function campaignStatusLabel(status) {
@@ -110,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const dashNavLinks = document.querySelectorAll('.dash-nav-link');
   const dashViews = document.querySelectorAll('.dash-view');
   const homeCampaignCta = document.getElementById('homeCampaignCta');
+  const homeQuickCards = document.querySelectorAll('.home-quick-card[data-view]');
 
   // ------------------------------------------------------------------
   // Guard: if not logged in, redirect back to login page
@@ -152,6 +167,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  homeQuickCards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      e.preventDefault();
+      setDashView(card.dataset.view);
+    });
+  });
+
   // ------------------------------------------------------------------
   // Render Logged-In User Profile (top bar + Home + Account tab)
   // ------------------------------------------------------------------
@@ -174,30 +196,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const completedCount = CAMPAIGNS.filter(c => c.mine && c.status === 'completed').length;
     const ongoingCount = CAMPAIGNS.filter(c => c.mine && c.status === 'ongoing').length;
 
-    renderHomeView(user, roleLabel, ongoingCount, completedCount);
+    renderHomeView(user);
     renderAccountView(user, avatarUrl, roleLabel, roleMuted, ongoingCount, completedCount);
   }
 
-  // Render the simple Home tab
-  function renderHomeView(user, roleLabel, ongoingCount, completedCount) {
+  // Render the Home tab: greeting + spotlight brief
+  function renderHomeView(user) {
     const homeUserName = document.getElementById('homeUserName');
-    const homeOngoingCount = document.getElementById('homeOngoingCount');
-    const homeCompletedCount = document.getElementById('homeCompletedCount');
-    const homeRoleText = document.getElementById('homeRoleText');
-
     if (homeUserName) homeUserName.textContent = user.global_name || user.username;
-    if (homeOngoingCount) homeOngoingCount.textContent = ongoingCount;
-    if (homeCompletedCount) homeCompletedCount.textContent = completedCount;
-    if (homeRoleText) homeRoleText.textContent = roleLabel;
+
+    const spotlight = pickSpotlightCampaign();
+    const spotStatus = document.getElementById('homeSpotlightStatus');
+    const spotPay = document.getElementById('homeSpotlightPay');
+    const spotTitle = document.getElementById('homeSpotlightTitle');
+    const spotRules = document.getElementById('homeSpotlightRules');
+    if (spotlight) {
+      if (spotStatus) {
+        spotStatus.textContent = campaignStatusLabel(spotlight.status);
+        spotStatus.className = `campaign-status ${spotlight.status}`;
+      }
+      if (spotPay) spotPay.textContent = spotlight.payRate;
+      if (spotTitle) spotTitle.textContent = spotlight.title;
+      if (spotRules) spotRules.textContent = spotlight.rules;
+    }
   }
 
-  // Render the dedicated Account tab
+  // Render the dedicated Account tab (maincard)
   function renderAccountView(user, avatarUrl, roleLabel, roleMuted, ongoingCount, completedCount) {
     const accAvatar = document.getElementById('accountAvatarImg');
     const accName = document.getElementById('accountName');
     const accUsername = document.getElementById('accountUsername');
-    const accNick = document.getElementById('accountNick');
-    const accRoleText = document.getElementById('accountRoleText');
+    const accRoleChip = document.getElementById('accountRoleChip');
     const accJoined = document.getElementById('accountJoined');
     const accCompleted = document.getElementById('accountCompleted');
     const accOngoing = document.getElementById('accountOngoing');
@@ -206,8 +235,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (accAvatar) accAvatar.src = avatarUrl;
     if (accName) accName.textContent = user.global_name || user.username;
     if (accUsername) accUsername.textContent = user.username.startsWith('@') ? user.username : `@${user.username}`;
-    if (accNick) accNick.textContent = user.global_name || user.username;
-    if (accRoleText) accRoleText.textContent = roleLabel;
+    if (accRoleChip) {
+      accRoleChip.textContent = roleLabel;
+      accRoleChip.classList.toggle('muted', roleMuted);
+    }
     if (accCompleted) accCompleted.textContent = completedCount;
     if (accOngoing) accOngoing.textContent = ongoingCount;
     if (accJoined) {
@@ -215,14 +246,18 @@ document.addEventListener('DOMContentLoaded', () => {
       accJoined.textContent = user.joined_label;
     }
     if (accRoleNote) {
-      if (user.role) {
-        accRoleNote.textContent = 'Your role is synced from the YVOLKA Discord server.';
-      } else if (user.auth_type === 'nickname') {
-        accRoleNote.textContent = 'Nickname sign-in can\'t be matched to a Discord role. Sign in with Discord to get one.';
-      } else {
-        accRoleNote.textContent = 'No role found yet. Ask an admin to assign your Developer / Artist / Creator role in Discord.';
-      }
+      accRoleNote.textContent = user.role
+        ? 'Your role is synced from the YVOLKA Discord server.'
+        : 'No role found yet. Ask an admin to assign your Developer / Artist / Creator role in Discord.';
     }
+  }
+
+  // Render the sponsor name marquee (duplicated once for a seamless loop)
+  function renderSponsors() {
+    const track = document.getElementById('sponsorMarqueeTrack');
+    if (!track) return;
+    const items = SPONSORS.map(name => `<span class="sponsor-marquee-name"><span class="dot"></span>${name}</span>`).join('');
+    track.innerHTML = items + items;
   }
 
   // Render the Campaign tab cards
@@ -267,6 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize
   // ------------------------------------------------------------------
   renderCampaigns();
+  renderSponsors();
   renderUserHeader(currentUser);
 
   // Re-check the Discord role in the background — if an admin changed
